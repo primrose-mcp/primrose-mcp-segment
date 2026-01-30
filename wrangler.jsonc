@@ -1,0 +1,68 @@
+{
+  // ==========================================================================
+  // Segment MCP Server - Wrangler Configuration
+  // ==========================================================================
+  //
+  // MULTI-TENANT ARCHITECTURE:
+  // This server supports multiple tenants. Credentials are passed via request
+  // headers, NOT stored as wrangler secrets. This allows a single deployment
+  // to serve multiple customers.
+  //
+  // Authentication Headers:
+  // - X-Segment-Write-Key: Write key for Tracking API (identify, track, etc.)
+  // - X-Segment-Access-Token: Bearer token for Public API (sources, destinations, etc.)
+  // ==========================================================================
+
+  "name": "primrose-mcp-segment",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // ==========================================================================
+  // Environment Variables (server-wide configuration, not per-tenant)
+  // ==========================================================================
+  "vars": {
+    "CHARACTER_LIMIT": "50000",
+    "DEFAULT_PAGE_SIZE": "20",
+    "MAX_PAGE_SIZE": "100"
+  },
+
+  // ==========================================================================
+  // Multi-Tenant Authentication (via Request Headers)
+  // ==========================================================================
+  //
+  // Tenant credentials are passed via HTTP headers on each request:
+  //
+  // For Tracking API (api.segment.io/v1):
+  //   X-Segment-Write-Key: Your Segment source write key
+  //
+  // For Public API (api.segmentapis.com):
+  //   X-Segment-Access-Token: Bearer token for Public API
+  //
+  // Optional:
+  //   X-Segment-Base-URL: Override base URL (for testing)
+
+  // ==========================================================================
+  // KV Namespace (uncomment for OAuth token storage)
+  // ==========================================================================
+  // Create: npx wrangler kv namespace create "OAUTH_KV"
+  //
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "OAUTH_KV",
+  //     "id": "<YOUR_KV_NAMESPACE_ID>"
+  //   }
+  // ],
+
+  // ==========================================================================
+  // Development
+  // ==========================================================================
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
